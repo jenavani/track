@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <h2>Welcome, {{ username }}</h2>
+        <div class="nav-icons">
+            <a href="{{ url_for('rewards') }}" class="nav-item">
+                <img src="{{ url_for('static', filename='images/rewards.png') }}" alt="Rewards">
+                <p>Rewards</p>
+            </a>
+            <a href="{{ url_for('insurance') }}" class="nav-item">
+                <img src="{{ url_for('static', filename='images/insurance.png') }}" alt="Insurance">
+                <p>Insurance</p>
+            </a>
+            <a href="{{ url_for('profile') }}" class="nav-item">
+                <img src="{{ url_for('static', filename='images/icon.jpg') }}" alt="Profile">
+                <p>Profile</p>
+            </a>
+        </div>
+    </header>
+
+    <section class="featured-plot">
+        <h3>Driving Insights</h3>
+        <div class="plot-container">
+            <div class="plot-price">Current Score: 85</div>
+            <div id="plotly-chart"></div>
+        </div>
+        <p>Analyze your recent driving patterns and optimize for rewards.</p>
+        <button class="view-details-btn">View More Details</button>
+    </section>
+</div>
+
+<script>
+    var plotData = JSON.parse('{{ plot_json | tojson | safe }}');
+    Plotly.newPlot('plotly-chart', plotData.data, plotData.layout);
+</script>
+
+{% endblock %}
