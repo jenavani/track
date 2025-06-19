@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='rewards.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="rewards-container">
+    <header class="rewards-header">
+        <h2>Your Rewards</h2>
+        <p class="points-display">Total Points: <span>{{ total_points }}</span></p>
+    </header>
+
+    <section class="rewards-list">
+        <h3>Available Rewards</h3>
+        <div class="rewards-grid">
+            {% for reward in rewards %}
+            <div class="reward-card">
+                <img src="{{ url_for('static', filename='images/' + reward.image) }}" alt="{{ reward.name }}">
+                <h4>{{ reward.name }}</h4>
+                <p class="points-required">{{ reward.points }} points</p>
+                <p class="reward-description">{{ reward.description }}</p>
+                <button class="redeem-btn" {% if reward.points > total_points %}disabled{% endif %}
+                    data-reward-id="{{ reward.id }}">
+                    {% if reward.points > total_points %}
+                    Need {{ reward.points - total_points }} more points
+                    {% else %}
+                    Redeem Now
+                    {% endif %}
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="rewards-history">
+        <h3>Redemption History</h3>
+        <div class="history-list">
+            {% for history in redemption_history %}
+            <div class="history-item">
+                <img src="{{ url_for('static', filename='images/' + history.reward_image) }}" alt="{{ history.reward_name }}">
+                <div class="history-details">
+                    <h4>{{ history.reward_name }}</h4>
+                    <p>Redeemed on: {{ history.date }}</p>
+                    <p>Points used: {{ history.points }}</p>
+                </div>
+                <div class="status {{ history.status.lower() }}">{{ history.status }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<script>
+document.querySelectorAll('.redeem-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const rewardId = this.dataset.rewardId;
+        if (!this.disabled) {
+            fetch('/redeem-reward', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ reward_id: rewardId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %} 
