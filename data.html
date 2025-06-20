@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_info.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>User Information</h2>
+        <form action="{{ url_for('submit_info') }}" method="post">
+            <label for="user_id">User ID:</label>
+            <input type="text" id="user_id" name="user_id" required>
+            
+            <label for="duration">Duration:</label>
+            <input type="number" id="duration" name="duration" required>
+            
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+            
+            <label for="experience">Experience (Years):</label>
+            <input type="number" id="experience" name="experience" required>
+            
+            <label for="policies">Policies in Force:</label>
+            <input type="number" id="policies" name="policies" required>
+            
+            <label for="max_policies">Max Policies:</label>
+            <input type="number" id="max_policies" name="max_policies" required>
+            
+            <label for="max_products">Max Products:</label>
+            <input type="number" id="max_products" name="max_products" required>
+            
+            <label for="lapse">Lapse:</label>
+            <input type="number" id="lapse" name="lapse" required>
+            
+            <label for="payment">Payment:</label>
+            <input type="number" id="payment" name="payment" required>
+            
+            <label for="premium">Premium:</label>
+            <input type="number" id="premium" name="premium" required>
+            
+            <label for="cost_claims">Cost of Claims (Year):</label>
+            <input type="number" id="cost_claims" name="cost_claims" required>
+            
+            <label for="n_claims_year">Number of Claims (Year):</label>
+            <input type="number" id="n_claims_year" name="n_claims_year" required>
+            
+            <label for="n_claims_history">Number of Claims (History):</label>
+            <input type="number" id="n_claims_history" name="n_claims_history" required>
+            
+            <label for="r_claims_history">R Claims History:</label>
+            <input type="number" id="r_claims_history" name="r_claims_history" required>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
