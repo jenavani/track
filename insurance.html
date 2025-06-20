@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='insurance.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="insurance-container">
+    <header class="insurance-header">
+        <h2>Insurance Overview</h2>
+        <div class="insurance-status">
+            <span class="status-label">Status:</span>
+            <span class="status-value {{ insurance_status.lower() }}">{{ insurance_status }}</span>
+        </div>
+    </header>
+
+    <section class="insurance-details">
+        <div class="current-plan">
+            <h3>Your Current Plan</h3>
+            <div class="plan-details">
+                <div class="detail-item">
+                    <span class="label">Plan Type:</span>
+                    <span class="value">{{ current_plan.type }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Coverage Amount:</span>
+                    <span class="value">₹{{ current_plan.coverage }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Premium:</span>
+                    <span class="value">₹{{ current_plan.premium }}/month</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Next Payment:</span>
+                    <span class="value">{{ current_plan.next_payment }}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="coverage-details">
+        <h3>Coverage Details</h3>
+        <div class="coverage-grid">
+            {% for coverage in coverage_details %}
+            <div class="coverage-item">
+                <img src="{{ url_for('static', filename='images/' + coverage.icon) }}" alt="{{ coverage.type }}">
+                <h4>{{ coverage.type }}</h4>
+                <p>{{ coverage.description }}</p>
+                <span class="coverage-amount">Up to ₹{{ coverage.amount }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="claim-history">
+        <h3>Claims History</h3>
+        <div class="claims-list">
+            {% if claims %}
+                {% for claim in claims %}
+                <div class="claim-item">
+                    <div class="claim-info">
+                        <h4>Claim #{{ claim.id }}</h4>
+                        <p>Date: {{ claim.date }}</p>
+                        <p>Type: {{ claim.type }}</p>
+                        <p>Amount: ₹{{ claim.amount }}</p>
+                    </div>
+                    <div class="claim-status {{ claim.status.lower() }}">
+                        {{ claim.status }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-claims">No claims history available</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="actions">
+        <button class="action-btn primary" data-action="file-claim">
+            File New Claim
+        </button>
+        <button class="action-btn secondary" data-action="update-plan">
+            Update Plan
+        </button>
+    </section>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle File Claim button
+    document.querySelector('[data-action="file-claim"]').addEventListener('click', function() {
+        window.location.href = "{{ url_for('file_claim') }}";
+    });
+
+    // Handle Update Plan button
+    document.querySelector('[data-action="update-plan"]').addEventListener('click', function() {
+        window.location.href = "{{ url_for('update_plan') }}";
+    });
+});
+</script>
+{% endblock %} 
